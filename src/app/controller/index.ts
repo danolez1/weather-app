@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import { Weather } from '../model';
 import { weatherApi } from '../api/[location]';
+import toast from 'react-hot-toast';
 
 interface GlobalState {
     day: string;
@@ -72,7 +73,16 @@ export const useStateMachine = create<GlobalState>((set, get) => ({
     handleSearch: async () => {
         set((state: GlobalState) => ({ ...state, loading: true }))
         const query = get().query;
-        const data = await weatherApi.getInfo(query);
+        const data = await toast.promise(weatherApi.getInfo(query), {
+            loading: `Loading weather information for ${query}  ... `,
+            success: (result) => {
+                if (result == null) {
+                    return `Weather information for ${query} could not be found`
+                }
+                return 'Weather information loaded.'
+            },
+            error: 'Something went wrong.'
+        });
         if (data != null)
             set((state: GlobalState) => ({ ...state, data, loading: false }))
     },

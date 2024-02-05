@@ -35,6 +35,7 @@ export const SearchBar = styled.input`
   font-size: large;
   width: 20em;
   text-align: center;
+  color: black;
   background-color: rgba(var(--accent-rgb), 0.5);
   border: 1px solid rgba(var(--primary-rgb));
   border-radius: var(--border-radius);
