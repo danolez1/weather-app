@@ -1,95 +1,125 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+"use client";
+/* eslint-disable @next/next/no-img-element */
+
+import { format } from "date-fns";
+import Link from "next/link";
+import {
+  Center,
+  InfoDescrip,
+  InfoItem,
+  Information,
+  InformationContainer,
+  Item,
+  Main,
+  SearchBar,
+  SearchButton,
+  SearchContainer,
+  Title,
+} from "./components";
+import { useStateMachine } from "./controller";
 
 export default function Home() {
+  const { loading, data, query, setDay, setQuery, handleSearch } =
+    useStateMachine((state) => state);
+
+  const weatherInfo = [
+    {
+      description: "Temperature",
+      value: `${data.current.temp_c}°C`,
+    },
+    {
+      description: "Humidity",
+      value: data.current.humidity,
+    },
+    {
+      description: "Cloud",
+      value: data.current.cloud,
+    },
+    {
+      description: "Wind Speed",
+      value: `${data.current.wind_kph}km/h`,
+    },
+    {
+      description: "Wind Direction",
+      value: data.current.wind_dir,
+    },
+  ];
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
+    <Main>
+      <Title>Weather Forecast App</Title>
 
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
+      <SearchContainer>
+        <SearchBar
+          placeholder="Location"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
         />
-      </div>
+        <SearchButton onClick={handleSearch}>Search</SearchButton>
+      </SearchContainer>
 
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
+      {data.location.region.length > 0 && (
+        <h3>{`${data.location.region}, ${data.location.country}`}</h3>
+      )}
 
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
+      <InformationContainer>
+        <h3>Current Weather</h3>
+        <br />
+        {data.current.last_updated_epoch > 0 && (
+          <Center>
+            <Information>
+              <Item>
+                <img
+                  src={data.current.condition.icon}
+                  alt="Weather Condition"
+                />
+                <InfoDescrip>{data.current.condition.text}</InfoDescrip>
+              </Item>
 
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
+              {weatherInfo.map((info, idx) => (
+                <Item key={idx}>
+                  <InfoItem>
+                    <h2>{info.value}</h2>
+                  </InfoItem>
+                  <InfoDescrip>{info.description}</InfoDescrip>
+                </Item>
+              ))}
+            </Information>
+          </Center>
+        )}
+      </InformationContainer>
 
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
+      <InformationContainer>
+        <h3>Week Forecast</h3>
+        <br />
+        <Center>
+          <Information>
+            {data.forecast.forecastday.map((data, id) => {
+              const date = new Date(data.date);
+              return (
+                id > 0 && (
+                  <Link
+                    key={id}
+                    onClick={() => setDay(data.date)}
+                    href={"/day"}
+                    style={{
+                      cursor: "pointer",
+                    }}
+                  >
+                    <Item>
+                      <h2>{date.getDate()}</h2>
+                      <img
+                        src={data.day.condition.icon}
+                        alt="Weather Condition"
+                      />
+                      <InfoDescrip> {format(date, "eeee")}</InfoDescrip>
+                    </Item>
+                  </Link>
+                )
+              );
+            })}
+          </Information>
+        </Center>
+      </InformationContainer>
+    </Main>
   );
 }
