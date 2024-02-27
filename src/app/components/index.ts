@@ -49,6 +49,17 @@ export const SearchBar = styled.input`
   }
 `;
 
+export const BackBtn = styled.img`
+  background-color: transparent;
+  border: 1px solid rgba(var(--primary-rgb), 0.3);
+  border-radius: 8px;
+  padding: 10px;
+  height: 48px;
+  width: 48px;
+  position: absolute;
+  left: 15%;
+`;
+
 export const SearchButton = styled.button`
   margin-left: 1em; /* Adjust the margin as needed */
   padding: 1rem;
@@ -64,12 +75,12 @@ export const InformationContainer = styled.div`
   border-radius: var(--border-radius);
   border-radius: 8px;
   padding: 1rem 1.2rem;
-  width: 25em;
+  width: 100%;
   overflow-x: clip;
   height: auto;
 
   @media (min-width: 768px) {
-    width: 37em;
+    width: 38em;
   }
 
   @media (min-width: 1024px) {

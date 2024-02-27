@@ -3,10 +3,13 @@
 import axios from "axios";
 import { NextRequest, NextResponse } from "next/server";
 
-export interface Slug { params: { [k: string]: string } };
-
+export interface Slug {
+  params: { [k: string]: string };
+}
 
 export async function GET(request: NextRequest, { params }: Slug) {
-    const { data } = await axios.get(`${process.env.PUBLIC_NEXT_WEATHER_ENDPOINT}forecast.json?key=${process.env.PUBLIC_NEXT_WEATHER_API}&q=${params.location}&days=8`);
-    return NextResponse.json(data);
+  const { data } = await axios.get(
+    `${process.env.PUBLIC_NEXT_WEATHER_ENDPOINT}forecast.json?key=${process.env.PUBLIC_NEXT_WEATHER_API}&q=${params.location}&days=8`,
+  );
+  return NextResponse.json(data);
 }
