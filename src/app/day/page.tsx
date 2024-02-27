@@ -3,6 +3,7 @@
 import { useStateMachine } from "../controller";
 
 import {
+  BackBtn,
   Center,
   InfoDescrip,
   InfoItem,
@@ -15,10 +16,11 @@ import {
   SearchContainer,
   Title,
 } from "../components";
+import Link from "next/link";
 
 export default function Page() {
   const { data, query, day, setQuery, handleSearch } = useStateMachine(
-    (state) => state
+    (state) => state,
   );
 
   const forecast = data.forecast.forecastday.find((cast) => cast.date == day);
@@ -67,6 +69,9 @@ export default function Page() {
   ];
   return (
     <Main>
+      <Link href={"/"}>
+        <BackBtn src="arrow-left.svg" alt="back btn" />
+      </Link>
       <Title>{day}</Title>
       <SearchContainer>
         <SearchBar
