@@ -106,7 +106,7 @@ export default function Home() {
                     }}
                   >
                     <Item>
-                      <h2>{date.getDate()}</h2>
+                      <h2>{date.getDate()+1}</h2>
                       <img
                         src={data.day.condition.icon}
                         alt="Weather Condition"
