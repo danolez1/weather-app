@@ -13,7 +13,7 @@ You can begin editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project utilizes [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
 
-## About Gauidy Assessment
+## About Gaudiy Assessment
 
 The total time taken from starting to completing the task was approximately 5 hours.
 
